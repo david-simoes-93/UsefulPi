@@ -1,6 +1,6 @@
 # UsefulPi
 
-Update and set env variables
+Update, set environment variables, ready a session manager like Tmux 
 
     sudo apt update
     sudo apt upgrade
@@ -10,7 +10,7 @@ Update and set env variables
         export LC_CTYPE=en_GB.UTF-8
     sudo apt install tmux
 
-Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-low-power-network-storage-device/)!
+Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-low-power-network-storage-device/) with 2 HDDs, one of which gets backed-up into the other every night
 
     sudo mkdir /media/USBHDD1
     sudo mkdir /media/USBHDD2
@@ -40,7 +40,7 @@ Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-
     crontab -e
         0 5 * * * rsync -av --delete /media/USBHDD1/shares /media/USBHDD2/shares/
     
-Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-debian/)
+Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-debian/) using PPTP
 
     sudo apt install pptpd
     sudo nano /etc/pptpd.conf
@@ -52,4 +52,23 @@ Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-deb
     sudo nano /etc/ppp/chap-secrets
         bluemoon93<TAB>*<TAB>mypassword<TAB>*
     sudo service pptpd restart
+
+Control USB ports and connected disks by [safely removing them](https://askubuntu.com/questions/532586/what-is-the-command-line-equivalent-of-safely-remove-drive), [turning off the power](https://stackoverflow.com/questions/4702216/controlling-a-usb-power-supply-on-off-with-linux) , [ejecting it](https://unix.stackexchange.com/questions/35508/eject-usb-drives-eject-command), or just [mounting/unmounting](https://askubuntu.com/questions/37767/how-to-access-a-usb-flash-drive-from-the-terminal)
+
+
+    # Turning off
+    udisksctl unmount -b /dev/sdb1
+    udisksctl power-off -b /dev/sdb
+    sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
+        0
+    sudo nano /sys/bus/usb/devices/usb1/power/control
+        auto
+    sudo eject /dev/sda
+    sudo umount /media/usb
+    # Turning on
+    sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
+        2000
+    sudo nano /sys/bus/usb/devices/usb1/power/control
+        on
+    sudo mount -t auto /dev/sda1 /media/USBHDD1
 
