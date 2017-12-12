@@ -40,7 +40,7 @@ Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-
     crontab -e
         0 5 * * * rsync -av --delete /media/USBHDD1/shares /media/USBHDD2/shares/
     
-Make a [VPN](https://www.digitalocean.com/community/tutorials/how-to-setup-your-own-vpn-with-pptp)
+Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-debian/)
 
     sudo apt install pptpd
     sudo nano /etc/pptpd.conf
@@ -49,5 +49,7 @@ Make a [VPN](https://www.digitalocean.com/community/tutorials/how-to-setup-your-
     sudo nano /etc/ppp/pptpd-options
         ms-dns 8.8.8.8
         ms-dns 8.8.4.4
+    sudo nano /etc/ppp/chap-secrets
+        bluemoon93<TAB>*<TAB>mypassword<TAB>*
     sudo service pptpd restart
 
