@@ -57,15 +57,15 @@ Control USB ports and connected disks by [safely removing them](https://askubunt
 
 
     # Turning off
-    udisksctl unmount -b /dev/sdb1
-    udisksctl power-off -b /dev/sdb
+    udisksctl unmount -b /dev/sda1
+    udisksctl power-off -b /dev/sda1
     sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
         0
     sudo nano /sys/bus/usb/devices/usb1/power/control
         auto
-    sudo eject /dev/sda
-    sudo umount /media/usb
-    sudo hdparm -S 25 /dev/sdb
+    sudo eject /dev/sda1
+    sudo umount /dev/sda1
+    sudo hdparm -S 25 /dev/sda1
     # Turning on
     sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
         2000
