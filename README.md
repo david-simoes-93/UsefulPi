@@ -57,8 +57,10 @@ Control USB ports and connected disks by [safely removing them](https://askubunt
 
 
     # Turning off
+    sync
     udisksctl unmount -b /dev/sda1
     udisksctl power-off -b /dev/sda1
+    
     sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
         0
     sudo nano /sys/bus/usb/devices/usb1/power/control
@@ -72,4 +74,6 @@ Control USB ports and connected disks by [safely removing them](https://askubunt
     sudo nano /sys/bus/usb/devices/usb1/power/control
         on
     sudo mount -t auto /dev/sda1 /media/USBHDD1
+    udisksctl mount -b /dev/sdf
+   
 
