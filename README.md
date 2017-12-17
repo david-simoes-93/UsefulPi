@@ -51,7 +51,8 @@ Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-deb
         ms-dns 8.8.4.4
     sudo nano /etc/ppp/chap-secrets
         bluemoon93<TAB>*<TAB>mypassword<TAB>*
-    sudo service pptpd restart
+    sudo nano /etc/rc.local
+        sudo service pptpd restart
 
 [WIP] Control USB ports and connected disks by [safely removing them](https://askubuntu.com/questions/532586/what-is-the-command-line-equivalent-of-safely-remove-drive), [turning off the power](https://stackoverflow.com/questions/4702216/controlling-a-usb-power-supply-on-off-with-linux) , [ejecting it](https://unix.stackexchange.com/questions/35508/eject-usb-drives-eject-command), [turning down the spin-down time](https://askubuntu.com/questions/39760/how-can-i-control-hdd-spin-down-time), or just [mounting/unmounting](https://askubuntu.com/questions/37767/how-to-access-a-usb-flash-drive-from-the-terminal)
 
