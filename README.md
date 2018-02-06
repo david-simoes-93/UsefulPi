@@ -78,3 +78,8 @@ Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-deb
     udisksctl mount -b /dev/sdf
    
 
+Control a Fan based on temperature on Pin 25
+
+    pip3 install psutil raspi
+    sudo nano /etc/rc.local
+        sudo -u pi -H sh -c "cd /home/pi/UsefulPi; python3 fan.py &"
