@@ -11,13 +11,13 @@ def get_cpu_temperature():
     output, _error = process.communicate()
     return float(output[output.index('=') + 1:output.rindex("'")])
 
+pin_id = 25 # https://hifiduino.files.wordpress.com/2014/11/i2spins-001.jpg
+max_temp = 60 # https://www.raspberrypi.org/forums/viewtopic.php?t=39953
+pooling_time = 60 
+
 # https://raspberrypi.stackexchange.com/questions/12966/what-is-the-difference-between-board-and-bcm-for-gpio-pin-numbering
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin_id, GPIO.OUT, initial=GPIO.LOW)
-
-pin_id = 25
-max_temp = 60 # https://www.raspberrypi.org/forums/viewtopic.php?t=39953
-pooling_time = 60 
 
 while True:
 	cpu_temperature = get_cpu_temperature()
