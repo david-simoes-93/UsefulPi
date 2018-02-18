@@ -11,7 +11,7 @@ def get_cpu_temperature():
     output, _error = process.communicate()
     return float(output[output.index('=') + 1:output.rindex("'")])
 
-pin_id = 25 # https://hifiduino.files.wordpress.com/2014/11/i2spins-001.jpg
+pin_id = 22 # https://user-images.githubusercontent.com/9117323/36357338-72f3b7ee-14f4-11e8-805b-e8c515bf5bf8.png
 max_temp = 60 # https://www.raspberrypi.org/forums/viewtopic.php?t=39953
 pooling_time = 60 
 
