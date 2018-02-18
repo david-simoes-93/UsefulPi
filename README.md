@@ -78,8 +78,15 @@ Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-deb
     udisksctl mount -b /dev/sdf
    
 
-Control a Fan based on temperature on Pin 25
+Control a Fan based on temperature, using the circuit below
 
     pip3 install psutil raspi
     sudo nano /etc/rc.local
         sudo -u pi -H sh -c "cd /home/pi/UsefulPi; python3 fan.py &"
+        
+
+![fan](https://user-images.githubusercontent.com/9117323/36357459-309bc7d6-14f6-11e8-989c-72024df3fac1.png)
+
+All schematics used were for Raspberry Pi 2B (my model), datasheet below
+
+![j8header-2b](https://user-images.githubusercontent.com/9117323/36357338-72f3b7ee-14f4-11e8-805b-e8c515bf5bf8.png)
