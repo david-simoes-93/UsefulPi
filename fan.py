@@ -9,6 +9,7 @@ from subprocess import PIPE, Popen
 def get_cpu_temperature():
     process = Popen(['vcgencmd', 'measure_temp'], stdout=PIPE)
     output, _error = process.communicate()
+    output = output.decode("utf-8")
     return float(output[output.index('=') + 1:output.rindex("'")])
 
 pin_id = 22 # https://user-images.githubusercontent.com/9117323/36357338-72f3b7ee-14f4-11e8-805b-e8c515bf5bf8.png
