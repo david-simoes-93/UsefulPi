@@ -67,7 +67,7 @@ Control a Fan based on temperature
     sudo nano /etc/rc.local
         sudo -u pi -H sh -c "cd /home/pi/UsefulPi; python3 fan.py &"
         
-I used the circuit below, with a [AN2222A Transistor](http://web.mit.edu/6.101/www/reference/2N2222A.pdf), but I've been told it should have been a VN2222. For AN2222A, the resistance should be serial, about 2.2k.
+I used the circuit below, with a [2N2222A Transistor](http://web.mit.edu/6.101/www/reference/2N2222A.pdf), but I've been told it should have been a VN2222. For 2N2222A, the resistance should be serial, about 2.2k.
 
 ![fan](https://user-images.githubusercontent.com/9117323/36357487-8f6cb4d2-14f6-11e8-8f86-0c9446cbec01.png)
 
