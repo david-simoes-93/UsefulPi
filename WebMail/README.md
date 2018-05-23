@@ -8,7 +8,7 @@ Install an SMTP server (from [here](https://www.digitalocean.com/community/tutor
 
     sudo apt-get install mailutils libsasl2-modules postfix
     sudo nano /etc/postfix/sasl/sasl_passwd
-        [smtp.gmail.com]:587 rulotesbar@gmail.com:mypassword
+        [smtp.gmail.com]:587 example@gmail.com:mypassword
     sudo postmap /etc/postfix/sasl/sasl_passwd
     sudo chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
     sudo chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
@@ -28,3 +28,21 @@ Install an SMTP server (from [here](https://www.digitalocean.com/community/tutor
     sudo service postfix restart
 
 And programatically send e-mails!
+
+    import smtplib
+    from email.mime.text import MIMEText
+    from email.header import Header
+
+    myemail = 'example@gmail.com'
+    client = 'sb.ua@ieee.org'
+
+    message = "To: "+Header("IEEE", "utf-8").encode()+" <"+client+\
+        ">\nSubject: "+Header("Spam", "utf-8").encode()+"\nThis is an automated message.\n"
+
+    try:
+       smtpObj = smtplib.SMTP('localhost')
+       smtpObj.sendmail(myemail, client, message)
+       print("Successfully sent email")
+    except:
+       print("Error: unable to send email")
+
