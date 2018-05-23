@@ -1,4 +1,4 @@
-#Control your GPIO
+# Control your GPIO
 
 For example, control a fan based on temperature
 

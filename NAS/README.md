@@ -1,4 +1,4 @@
-#Turning RPi into a NAS
+# Turning RPi into a NAS
 
 Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-low-power-network-storage-device/) with 2 HDDs, using Samba.
 

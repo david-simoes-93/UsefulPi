@@ -1,4 +1,4 @@
-#Turn the RPi into a VPN
+# Turn the RPi into a VPN
 
 Make a [VPN](https://www.howtogeek.com/51237/setting-up-a-vpn-pptp-server-on-debian/) using PPTP
 
