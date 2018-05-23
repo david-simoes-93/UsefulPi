@@ -26,6 +26,10 @@ Make a [NAS](https://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-
     sudo passwd bluemoon93
     sudo smbpasswd -a bluemoon93
 
+You can use these [modular shelves](https://www.thingiverse.com/thing:2852303) and customize your NAS.
+
+![NAS](https://raw.githubusercontent.com/bluemoon93/UsefulPi/master/NAS/IMG_20180412_113004.jpg)
+
 To save energy, make sure the HDDs [spin-down](https://askubuntu.com/questions/39760/how-can-i-control-hdd-spin-down-time) when not being used
 
     sudo nano /sys/bus/usb/devices/usb1/power/autosuspend_delay_ms
