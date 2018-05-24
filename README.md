@@ -13,6 +13,7 @@ I suggest starting with an update, setting environment variables, and readying a
         export LANG=en_GB.UTF-8
         export LC_ALL=en_GB.UTF-8
         export LC_CTYPE=en_GB.UTF-8
+    source .bashrc
     sudo apt install tmux git
 
 All schematics used were for Raspberry Pi 2B (my model), datasheet below.
