@@ -16,6 +16,8 @@ I suggest starting with an update, setting environment variables, and readying a
     source .bashrc
     sudo apt install tmux git
 
-All schematics used were for Raspberry Pi 2B (my model), datasheet below.
+All schematics used were for Raspberry Pi 2B (my model), datasheet below. You can also use the following command
+
+    gpio readall
 
 ![raspib-gpio_reference](https://user-images.githubusercontent.com/9117323/37006687-656076ba-20d1-11e8-96f2-0f03cf983224.png)
