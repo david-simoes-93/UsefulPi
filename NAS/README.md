@@ -53,4 +53,3 @@ To unmount the HDDs, if you want to turn them off
     sync
     sudo umount /dev/sda1
     sudo umount /dev/sdb1
-    

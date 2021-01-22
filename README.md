@@ -14,7 +14,25 @@ I suggest starting with an update, setting environment variables, and readying a
         export LC_ALL=en_GB.UTF-8
         export LC_CTYPE=en_GB.UTF-8
     source .bashrc
-    sudo apt install tmux git
+    sudo apt install tmux git python3-venv
+
+After changing the password, copy your RPi's ssh id to your local machine to avoid having to input password everytime
+
+    ssh-keygen
+        <choose whatever settings you want or spam Return for defaults>
+    ssh-copy-id pi@192.168.1.100
+        <password>
+    nano ~/.ssh/config
+        Host my_pi
+        ForwardAgent yes
+        ControlMaster auto
+        Compression yes
+        ControlPersist 16
+        ControlPath /tmp/%r@%h-%p
+        Protocol 2
+        Hostname 192.168.1.100
+        User pi
+    ssh my_pi
 
 All schematics used were for Raspberry Pi 2B (my model), datasheet below. You can also use the following command
 
