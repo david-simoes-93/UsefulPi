@@ -188,3 +188,12 @@ def display_output(lines, out_file):
     #print(' '.join(outlist))
     with open(out_file+".txt", 'a') as f:
         f.write(' '.join(outlist))
+
+def file_path_invalid(file_path):
+    """
+    Returns True if file_path is declared but doesnt exist
+    """
+    if file_path is not None and not os.path.isfile(file_path):
+        print("File " + file_path + " not found")
+        return True
+    return False

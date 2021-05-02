@@ -85,11 +85,11 @@ def fitness(through_pixels_dict, image, line, darkness, lp, w, w_pos, w_neg, lin
 
 def optimise_fitness(through_pixels_dict, n_hooks, image, previous_edge, darkness,
                      lightness_penalty, list_of_lines,
-                     w, w_pos, w_neg, line_norm_mode, time_saver):
+                     w, w_pos, w_neg, line_norm_mode, line_sample_fraction):
     """
     Process of adding a new line is as follows:
      1. Generates all possible lines starting from this hook (or a subset of lines, if you are
-            using the 'time_saver' parameter).
+            using the 'line_sample_fraction' parameter).
      2. Finds the line with the best fitness score.
      2. Subtracts this line from the image.
      3. Returns the new image, and the best line.
@@ -105,11 +105,11 @@ def optimise_fitness(through_pixels_dict, n_hooks, image, previous_edge, darknes
     next_lines = next_lines[mask]
 
     # randomly pick a subset of the lines to evaluate
-    if time_saver == 1:
+    if line_sample_fraction == 1:
         next_lines = next_lines.tolist()
     else:
         next_lines = next_lines[np.random.choice(
-            np.arange(len(next_lines)), int(len(next_lines) * time_saver))].tolist()
+            np.arange(len(next_lines)), int(len(next_lines) * line_sample_fraction))].tolist()
     # print(next_lines)
 
     # evaluate and pick best line
@@ -126,7 +126,7 @@ def optimise_fitness(through_pixels_dict, n_hooks, image, previous_edge, darknes
 
 
 def find_lines(through_pixels_dict, n_hooks, wheel_pixel_size, image, n_lines, darkness, lightness_penalty,
-               line_norm_mode, w=None, w_pos=None, w_neg=None, time_saver=1):
+               line_norm_mode, w=None, w_pos=None, w_neg=None, line_sample_fraction=1):
     """
     Calls 'optimise_fitness' multiple times to draw a set of lines.
     Updates the image and the list of lines with each line drawn.
@@ -156,7 +156,7 @@ def find_lines(through_pixels_dict, n_hooks, wheel_pixel_size, image, n_lines, d
 
         image, line = optimise_fitness(through_pixels_dict, n_hooks, image_copy, previous_edge,
                                        darkness, lightness_penalty, list_of_lines,
-                                       w, w_pos, w_neg, line_norm_mode, time_saver)
+                                       w, w_pos, w_neg, line_norm_mode, line_sample_fraction)
         previous_edge = line[1]
         list_of_lines.append(line)
 
@@ -175,11 +175,9 @@ def get_penalty(image, lightness_penalty, w, w_pos, w_neg):
     An image initially is [0, 255]. As lines are added, each pixel is subtracted the 'darkness' value,
     and it can become negative.
     """
-    #print(str(image.sum()) + "  " + str(image[image > 0].sum()) + "  " + str(image[image < 0].sum()))
-    #print()
     if w is None and w_pos is None:
-        # standard image penalty: sum all the pixels (so darker images have more penalty)
-        #  and then check and add penalty for negative pixels
+        # standard image penalty: sum all the pixels (so dark images where lines havent yet been added
+        # have more penalty) and then check and add penalty for negative pixels
         return image[image > 0].sum() - lightness_penalty * image[image < 0].sum()
     elif w_pos is None:
         # weighted image penalty: create a weighted image based on w (multiplies all pixel values by [0,1]).
@@ -187,7 +185,7 @@ def get_penalty(image, lightness_penalty, w, w_pos, w_neg):
         image_w = image * w
         return image_w[image > 0].sum() - lightness_penalty * image_w[image < 0].sum()
     elif w is None:
-        # bi-weighted image penalty: create two weighted images, one for positive pixels, one for negatives.
+        # dual-weighted image penalty: create two weighted images, one for positive pixels, one for negatives.
         #  Then sum all the positive pixels (bigger weights cause higher penalty)
         #  and add penalty for negative pixels (bigger weights cause higher penalty)
         image_wpos = image * w_pos
@@ -195,7 +193,9 @@ def get_penalty(image, lightness_penalty, w, w_pos, w_neg):
         return image_wpos[image > 0].sum() - lightness_penalty * image_wneg[image < 0].sum()
 
 
-def main(src_file, src_file_weighted, out_file, n_hooks, n_lines,
+def main(src_file, src_file_weighted, src_file_wpos, src_file_wneg,
+         out_file, no_progress_output,
+         n_hooks, n_lines, line_darkness, light_penalty,
          wheel_diameter_m, wheel_pixel_size):
     hooks = generate_hooks(n_hooks, wheel_pixel_size)
     through_pixels_dict = build_through_pixels_dict(
@@ -212,24 +212,24 @@ def main(src_file, src_file_weighted, out_file, n_hooks, n_lines,
         image_w = prepare_image(src_file_weighted,
                                 wheel_pixel_size, weighting=True)
         line_norm_mode = LineNormalization.WEIGHTED_LENGTH
-    if False:
-        # under test
-        image_w_pos = prepare_image("joker_wpos.jpg",
+    if src_file_wpos is not None and src_file_wneg is not None:
+        image_w_pos = prepare_image(src_file_wpos,
                                     wheel_pixel_size, weighting=True)
-        image_w_neg = prepare_image("joker_wneg.jpg",
+        image_w_neg = prepare_image(src_file_wneg,
                                     wheel_pixel_size, weighting=True)
         line_norm_mode = LineNormalization.WEIGHTED_LENGTH
 
     lines = find_lines(through_pixels_dict, n_hooks, wheel_pixel_size,
                        image_m, n_lines=n_lines,
-                       darkness=125, lightness_penalty=0.5,
+                       darkness=line_darkness, lightness_penalty=light_penalty,
                        w=image_w, w_pos=image_w_pos, w_neg=image_w_neg,
                        line_norm_mode=line_norm_mode,
-                       time_saver=1)
+                       line_sample_fraction=1)
 
     save_plot([lines], [(0, 0, 0)], out_file, wheel_pixel_size, n_hooks)
-    save_plot_progress([lines], [(0, 0, 0)], out_file, wheel_pixel_size, n_hooks,
-                       np.arange(0.0, 1.0, 1.0/(n_lines//100)))
+    if not no_progress_output:
+        save_plot_progress([lines], [(0, 0, 0)], out_file, wheel_pixel_size, n_hooks,
+                        np.arange(0.0, 1.0, 1.0/(n_lines//100)))
     total_distance(lines, hooks, wheel_diameter_m, wheel_pixel_size, out_file)
     display_output(lines, out_file)
 
@@ -242,26 +242,35 @@ if __name__ == "__main__":
     parser.add_argument('src', help='''Source file (.jpg, .png, ...)''')
     parser.add_argument('--dst_dir', default="out", dest='dst_dir',
                         help='''Folder to output files into''')
-    parser.add_argument('--hooks', type=int, default=180, dest='hooks',
+    parser.add_argument('--hooks', type=int, default=360, dest='hooks',
                         help='''Amount of hooks in portrait''')
-    parser.add_argument('--lines', type=int, default=2500, dest='lines',
-                        help='''Amount of thread lines in portrait, crossing the hooks''')
+    group_l = parser.add_mutually_exclusive_group()
+    group_l.add_argument('--lines', type=int, default=2500, dest='lines',
+                         help='''Amount of thread lines in portrait, crossing the hooks''')
+    group_l.add_argument('--max_lines', action='store_true', dest='max_lines',
+                         help='''Whether to make all possible line combinations (use with gray.jpg)''')
     parser.add_argument('--wheel_m', type=float, default=0.540, dest='wheel_m',
                         help='''Diameter (in meters) of wheel portrait''')
     parser.add_argument('--wheel_p', type=int, default=1500, dest='wheel_p',
-                        help='''Diameter (in pixels) of output images''')
-    parser.add_argument('--weighted', default=None, dest='weighted',
-                        help='''A secondary image with more important zones having dark masks''')
-    parser.add_argument('--verbose', action='store_true', dest='verbose',
-                        help='''Whether to print all info''')
+                        help='''Diameter (in pixels) of output images (larger values imply thinner lines, which at a distance, imply lighter lines)''')
+    parser.add_argument('--line_darkness', type=int, default=125, dest='line_darkness',
+                        help='''Line darkness [0, 255], subtracted from photo with each new line (usually above 125)''')
+    parser.add_argument('--light_penalty', type=float, default=0.5, dest='light_penalty',
+                        help='''Ratio [0,1] of how much to penalize for when photo with subtracted lines goes into negative''')
+    group_w = parser.add_mutually_exclusive_group()
+    group_w.add_argument('--weighted', default=None, dest='weighted',
+                         help='''A secondary image with more important zones having dark masks''')
+    group_w.add_argument('--dual_weighted', default=[None, None], dest='dual_weighted', nargs=2,
+                         help='''Two secondary images, with first (wpos) having important zones with dark masks and second (wneg) having clear zones with dark masks''')
+    parser.add_argument('--no_progress_output', action='store_true', dest='no_progress_output',
+                        help='''Whether to create progress images every 100 lines''')
     args = parser.parse_args()
 
     # sanitize input
-    if not os.path.isfile(args.src):
-        print("File " + args.src + " not found")
-        exit(0)
-    if args.weighted is not None and not os.path.isfile(args.weighted):
-        print("File " + args.weighted + " not found")
+    if file_path_invalid(args.src) or \
+            file_path_invalid(args.weighted) or \
+            file_path_invalid(args.dual_weighted[0]) or \
+            file_path_invalid(args.dual_weighted[1]):
         exit(0)
     if len(args.dst_dir) != 0 and not os.path.isdir(args.dst_dir):
         try:
@@ -271,11 +280,13 @@ if __name__ == "__main__":
             exit(0)
     n_hooks = max(3, args.hooks)
     # maximum amount of lines is equal to 1+2+...+n_hooks-1 = (n_hooks-1)*(n_hooks/2)
-    n_lines = max(1, min(args.lines, int((n_hooks-1)*(n_hooks/2))))
+    max_lines = int((n_hooks-1)*(n_hooks/2))
+    n_lines = max_lines if args.max_lines else max(1, min(args.lines, max_lines))
+    line_darkness = max(0, min(255, args.line_darkness))
+    light_penalty = max(0, min(1, args.light_penalty))
     wheel_m = max(0.1, args.wheel_m)
     wheel_p = max(10, args.wheel_p)
 
-    main(args.src, args.weighted,
-         os.path.join(args.dst_dir, "out"),
-         n_hooks, n_lines,
-         wheel_m, wheel_p)
+    main(args.src, args.weighted, args.dual_weighted[0], args.dual_weighted[1],
+         os.path.join(args.dst_dir, "out"), args.no_progress_output,
+         n_hooks, n_lines, line_darkness, light_penalty, wheel_m, wheel_p)
