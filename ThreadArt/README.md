@@ -13,7 +13,7 @@ Some nice abstract art with few hooks
 Or a more decent portrait
 
     python generate.py example.jpg --weighted example_weighted.jpg
-    python generate.py churchill.jpg --weighted churchill_weighted.jpg --lines 4000 --light_penalty 0.1 --wheel_p 2500
+    python generate.py churchill.jpg --weighted churchill_weighted.jpg --lines 4000 --light_penalty 0.1 --line_w 0.4
     python generate.py joker.jpg --dual_weighted joker_wpos.jpg joker_wneg.jpg
 
 Feel free to experiment

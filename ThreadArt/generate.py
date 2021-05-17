@@ -243,27 +243,27 @@ if __name__ == "__main__":
     parser.add_argument('--dst_dir', default="out", dest='dst_dir',
                         help='''Folder to output files into''')
     parser.add_argument('--hooks', type=int, default=360, dest='hooks',
-                        help='''Amount of hooks in portrait''')
+                        help='''Amount of hooks in portrait (default: 360)''')
     group_l = parser.add_mutually_exclusive_group()
     group_l.add_argument('--lines', type=int, default=2500, dest='lines',
-                         help='''Amount of thread lines in portrait, crossing the hooks''')
+                         help='''Amount of thread lines in portrait, crossing the hooks (default: 2500)''')
     group_l.add_argument('--max_lines', action='store_true', dest='max_lines',
                          help='''Whether to make all possible line combinations (use with gray.jpg)''')
     parser.add_argument('--wheel_m', type=float, default=0.540, dest='wheel_m',
-                        help='''Diameter (in meters) of wheel portrait''')
-    parser.add_argument('--wheel_p', type=int, default=1500, dest='wheel_p',
-                        help='''Diameter (in pixels) of output images (larger values imply thinner lines, which at a distance, imply lighter lines)''')
+                        help='''Diameter (in meters) of wheel portrait (default: 54cm)''')
+    parser.add_argument('--line_w', type=float, default=0.7, dest='line_w',
+                        help='''Width (in milimeters) of line (default: 0.7mm)''')
     parser.add_argument('--line_darkness', type=int, default=125, dest='line_darkness',
-                        help='''Line darkness [0, 255], subtracted from photo with each new line (usually above 125)''')
+                        help='''Line darkness [0, 255], subtracted from photo with each new line (usually >= 125) (default: 125)''')
     parser.add_argument('--light_penalty', type=float, default=0.5, dest='light_penalty',
-                        help='''Ratio [0,1] of how much to penalize for when photo with subtracted lines goes into negative''')
+                        help='''Ratio [0,1] of how much to penalize for when photo with subtracted lines goes into negative (default: 0.5)''')
     group_w = parser.add_mutually_exclusive_group()
     group_w.add_argument('--weighted', default=None, dest='weighted',
                          help='''A secondary image with more important zones having dark masks''')
     group_w.add_argument('--dual_weighted', default=[None, None], dest='dual_weighted', nargs=2,
                          help='''Two secondary images, with first (wpos) having important zones with dark masks and second (wneg) having clear zones with dark masks''')
     parser.add_argument('--no_progress_output', action='store_true', dest='no_progress_output',
-                        help='''Whether to create progress images every 100 lines''')
+                        help='''Whether to create progress images every 100 lines (default: True)''')
     args = parser.parse_args()
 
     # sanitize input
@@ -285,7 +285,10 @@ if __name__ == "__main__":
     line_darkness = max(0, min(255, args.line_darkness))
     light_penalty = max(0, min(1, args.light_penalty))
     wheel_m = max(0.1, args.wheel_m)
-    wheel_p = max(10, args.wheel_p)
+    #wheel_p = max(10, args.wheel_p)
+    line_w_milim = max(0.01, args.line_w)
+    line_w_m = line_w_milim / 1000      # line width in meters
+    wheel_p = int(1 / line_w_m)         # diameter (in pixels) of thread portrait
 
     main(args.src, args.weighted, args.dual_weighted[0], args.dual_weighted[1],
          os.path.join(args.dst_dir, "out"), args.no_progress_output,
