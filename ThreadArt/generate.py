@@ -285,7 +285,6 @@ if __name__ == "__main__":
     line_darkness = max(0, min(255, args.line_darkness))
     light_penalty = max(0, min(1, args.light_penalty))
     wheel_m = max(0.1, args.wheel_m)
-    #wheel_p = max(10, args.wheel_p)
     line_w_milim = max(0.01, args.line_w)
     line_w_m = line_w_milim / 1000      # line width in meters
     wheel_p = int(1 / line_w_m)         # diameter (in pixels) of thread portrait
