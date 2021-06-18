@@ -8,7 +8,10 @@ Make some beautiful threaded paintings which you can then build in your own home
 
 Some nice abstract art with few hooks
 
-    python generate.py gray.jpg --hooks 45 --lines 1000
+    python generate.py gray.jpg --hooks 45 --max_lines
+    
+![image](https://user-images.githubusercontent.com/9117323/122535251-47aac380-d01b-11eb-990d-94e92164c4fe.png)
+
 
 Or a more decent portrait
 
@@ -25,6 +28,8 @@ Or a more decent portrait
 ![image](https://user-images.githubusercontent.com/9117323/122534401-6066a980-d01a-11eb-9a0d-2524ce88340e.png)
 
     python generate.py che.png --dual_weighted che_wpos.jpg che_wneg.jpg --line_w 0.5 --hooks 180
+    
+![image](https://user-images.githubusercontent.com/9117323/122535287-4f6a6800-d01b-11eb-9dd0-699a0fc56e35.png)
 
 Feel free to experiment
 
