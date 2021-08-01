@@ -183,8 +183,10 @@ def display_output(lines, out_file):
     outlist = []
     for i in range(len(lines)):
         line = lines[i]
-        output_number = f"{line[1]//2}"
+        output_number = f"{line[1]}"
         outlist.append(output_number)
+        if i % 10 == 0:
+            outlist.append('/n')
     #print(' '.join(outlist))
     with open(out_file+".txt", 'a') as f:
         f.write(' '.join(outlist))

@@ -133,8 +133,8 @@ def find_lines(through_pixels_dict, n_hooks, wheel_pixel_size, image, n_lines, d
     Every 100 lines drawn, prints output that describes the progress of the algorithm (including average
     penalty, current runtime, and projected total runtime).
     """
-    list_of_lines = []
     previous_edge = np.random.choice(n_hooks)
+    list_of_lines = [previous_edge]
     print("starting hook: "+str(previous_edge))
 
     image_copy = image.copy()
