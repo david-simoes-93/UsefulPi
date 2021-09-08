@@ -134,7 +134,7 @@ def find_lines(through_pixels_dict, n_hooks, wheel_pixel_size, image, n_lines, d
     penalty, current runtime, and projected total runtime).
     """
     previous_edge = np.random.choice(n_hooks)
-    list_of_lines = [previous_edge]
+    list_of_lines = [[previous_edge, previous_edge]]
     print("starting hook: "+str(previous_edge))
 
     image_copy = image.copy()
